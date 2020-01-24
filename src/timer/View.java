@@ -1,8 +1,6 @@
 package timer;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,30 +19,32 @@ public class View extends Application {
     private double boarderPadding = 50.0f;
     private double topPadding = 25.0f;
 
-    // Node Variables
-    private Label entryL;
+    // Labels and Buttons
     private TextField entryF;
-    private Circle circle;
     private Label countDownLabel;
     private Button startB;
     private Button resetB;
     private Button pauseB;
 
+    // Root pane
     private Group root;
 
+    // The presenter needed for the view to know whom to talk to
     private Presenter presenter;
 
-    //Constructor
+    // View Constructor
     public View(Presenter presenter) {
         this.presenter = presenter;
     }
 
 
+    // Application obligatory start method
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
-        // Set Timer Label
-        entryL = new Label();
+        // Node Variables
+        //Set timer label
+        Label entryL = new Label();
         entryL.setLayoutX(40.0f);
         entryL.setLayoutY(topPadding);
         entryL.setText("Set timer: ");
@@ -64,15 +64,10 @@ public class View extends Application {
         startB.setFont(Font.font("Helvetica Neue", 12));
 
         // Mit diesem Listener hört die View auf den Button.
-        startB.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                presenter.startButtonPressed(entryF.getText());
-            }
-        });
+        startB.setOnAction(event -> presenter.startButtonPressed(entryF.getText()));
 
         // Circle
-        circle = new Circle();
+        Circle circle = new Circle();
         circle.setCenterX(150.0f);
         circle.setCenterY(200.0f);
         circle.setRadius(130.0f);
@@ -99,12 +94,7 @@ public class View extends Application {
         pauseB_OFF();
 
         // Mit diesem Listener hört die View auf den Button.
-        pauseB.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                presenter.pauseButtonPressed();
-            }
-        });
+        pauseB.setOnAction(event -> presenter.pauseButtonPressed());
 
         // Reset Button
         resetB = new Button();
@@ -116,12 +106,7 @@ public class View extends Application {
         resetB_OFF();
 
         // Mit diesem Listener hört die View auf den Button.
-        resetB.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                presenter.resetButtonPressed();
-            }
-        });
+        resetB.setOnAction(event -> presenter.resetButtonPressed());
 
         // ADD CHILDREN
         root = new Group();
@@ -168,6 +153,10 @@ public class View extends Application {
 
     public void updateCountDownLabel() {
         countDownLabel.setText(String.valueOf(presenter.getTime()));
+    }
+
+    public Group getRoot() {
+        return root;
     }
 
 

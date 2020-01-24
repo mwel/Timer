@@ -14,13 +14,16 @@ public class Presenter {
     // Alles, was in der View passiert muss hier abgefangen werden. Am besten für jedes Event eine Methode.
     public void startButtonPressed(String enteredTime) {
         try {
-            time = Integer.valueOf(enteredTime);
+            time = Integer.parseInt(enteredTime);
         } catch (NumberFormatException e) {
             e.fillInStackTrace();
         }
 
         if (isTimerReady()) {
             model.countDown(time);
+            while (model.isTimerRunning()) {
+                view.updateCountDownLabel();
+            }
         }
         view.startB_OFF();
         view.pauseB_ON();
@@ -28,10 +31,7 @@ public class Presenter {
     }
 
     public void pauseButtonPressed() {
-
-
-        view.pauseB_OFF();
-        view.startB_ON();
+        model.pause();
     }
 
     public void resetButtonPressed() {
@@ -46,11 +46,7 @@ public class Presenter {
     public boolean isTimerReady() {
 
         // Wann darf timer überhaupt gestartet werdern?
-        if (model.isTimerRunning()) {
-            return false;
-        } else {
-            return true;
-        }
+        return !model.isTimerRunning();
     }
 
     public int getTime() {

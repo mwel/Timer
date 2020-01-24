@@ -1,8 +1,6 @@
 package timer;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -10,9 +8,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+
+        Presenter presenter = new Presenter();
+        Model model = new Model();
+        View view = new View(presenter);
+        view.start(primaryStage);
+        presenter.setModelAndView(model, view);
+        Scene scene = new Scene(view.getRoot());
+
+        primaryStage.setTitle("Timer");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

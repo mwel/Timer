@@ -1,6 +1,8 @@
 package timer;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,37 +15,64 @@ import javafx.stage.Stage;
 
 public class View extends Application {
 
+    // Style Variables
     private double buttonWidth = 80.0f;
     private double timerWidth = 120.0f;
     private double boarderPadding = 50.0f;
     private double topPadding = 25.0f;
+
+    // Node Variables
+    private Label entryL;
+    private TextField entryF;
+    private Circle circle;
+    private Label countDownLabel;
+    private Button startB;
+    private Button resetB;
+    private Button pauseB;
+
+    private Group root;
+
+    private Presenter presenter;
+
+    //Constructor
+    public View(Presenter presenter) {
+        this.presenter = presenter;
+    }
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         // Set Timer Label
-        Label entryL = new Label();
+        entryL = new Label();
         entryL.setLayoutX(40.0f);
         entryL.setLayoutY(topPadding);
         entryL.setText("Set timer: ");
 
         // Entry Field
-        TextField entryF = new TextField();
+        entryF = new TextField();
         entryF.setLayoutX(110.0f);
         entryF.setLayoutY(topPadding);
         entryF.setPrefWidth(buttonWidth);
 
         // start Button
-        Button startB = new Button();
+        startB = new Button();
         startB.setLayoutX(200);
         startB.setLayoutY(topPadding);
         startB.setPrefWidth(buttonWidth);
         startB.setText("Start");
         startB.setFont(Font.font("Helvetica Neue", 12));
 
+        // Mit diesem Listener hört die View auf den Button.
+        startB.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                presenter.startButtonPressed(entryF.getText());
+            }
+        });
+
         // Circle
-        Circle circle = new Circle();
+        circle = new Circle();
         circle.setCenterX(150.0f);
         circle.setCenterY(200.0f);
         circle.setRadius(130.0f);
@@ -52,39 +81,55 @@ public class View extends Application {
         circle.setStrokeWidth(3.0f);
 
         // CountDown Label
-        Label cDLabel = new Label();
-        cDLabel.setText("00:00:00");
-        cDLabel.setLayoutX(130.0f);
-        cDLabel.setLayoutY(180.0f);
+        countDownLabel = new Label();
+        countDownLabel.setText("00:00:00");
+        countDownLabel.setLayoutX(130.0f);
+        countDownLabel.setLayoutY(180.0f);
 //        cDLabel.setFont(Font.font("Helvetica Neue", 24.0f));
-        cDLabel.setMinWidth(timerWidth);
+        countDownLabel.setMinWidth(timerWidth);
 
 
         // Pause Button
-        Button pauseB = new Button();
+        pauseB = new Button();
         pauseB.setLayoutX(boarderPadding);
         pauseB.setLayoutY(350);
         pauseB.setPrefWidth(buttonWidth);
         pauseB.setText("Pause");
-        cDLabel.setFont(Font.font("Helvetica Neue", 12));
+        countDownLabel.setFont(Font.font("Helvetica Neue", 12));
+        pauseB_OFF();
 
+        // Mit diesem Listener hört die View auf den Button.
+        pauseB.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                presenter.pauseButtonPressed();
+            }
+        });
 
         // Reset Button
-        Button resetB = new Button();
+        resetB = new Button();
         resetB.setLayoutX(170);
         resetB.setLayoutY(350);
         resetB.setPrefWidth(buttonWidth);
         resetB.setText("Reset");
-        cDLabel.setFont(Font.font("Helvetica Neue", 12));
+        countDownLabel.setFont(Font.font("Helvetica Neue", 12));
+        resetB_OFF();
 
+        // Mit diesem Listener hört die View auf den Button.
+        resetB.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                presenter.resetButtonPressed();
+            }
+        });
 
-        // ROOT and ADD
-        Group root = new Group();
+        // ADD CHILDREN
+        root = new Group();
         root.getChildren().add(entryL);
         root.getChildren().add(entryF);
         root.getChildren().add(startB);
         root.getChildren().add(circle);
-        root.getChildren().add(cDLabel);
+        root.getChildren().add(countDownLabel);
         root.getChildren().add(pauseB);
         root.getChildren().add(resetB);
 
@@ -96,6 +141,35 @@ public class View extends Application {
 
 
     }
+
+    public void startB_OFF() {
+        startB.setDisable(true);
+    }
+
+    public void startB_ON() {
+        startB.setDisable(false);
+    }
+
+    public void pauseB_OFF() {
+        pauseB.setDisable(true);
+    }
+
+    public void pauseB_ON() {
+        pauseB.setDisable(false);
+    }
+
+    public void resetB_OFF() {
+        resetB.setDisable(true);
+    }
+
+    public void resetB_ON() {
+        resetB.setDisable(false);
+    }
+
+    public void updateCountDownLabel() {
+        countDownLabel.setText(String.valueOf(presenter.getTime()));
+    }
+
 
     public static void main(String[] args) {
 

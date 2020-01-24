@@ -12,9 +12,9 @@ public class Main extends Application {
         Presenter presenter = new Presenter();
         Model model = new Model();
         View view = new View(presenter);
-        view.start(primaryStage);
+        view.initView();
         presenter.setModelAndView(model, view);
-        Scene scene = new Scene(view.getRoot());
+        Scene scene = new Scene(view.getRoot(), 300, 400); // why is this initialised in the main and not in the view?
 
         primaryStage.setTitle("Timer");
         primaryStage.setScene(scene);

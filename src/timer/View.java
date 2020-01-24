@@ -1,17 +1,14 @@
 package timer;
 
-import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
-public class View extends Application {
+public class View {
 
     // Style Variables
     private double buttonWidth = 80.0f;
@@ -27,7 +24,7 @@ public class View extends Application {
     private Button pauseB;
 
     // Root pane
-    private Group root;
+    private Group root = new Group(); // why do I need this?
 
     // The presenter needed for the view to know whom to talk to
     private Presenter presenter;
@@ -35,12 +32,10 @@ public class View extends Application {
     // View Constructor
     public View(Presenter presenter) {
         this.presenter = presenter;
+        initView();
     }
 
-
-    // Application obligatory start method
-    @Override
-    public void start(Stage primaryStage) {
+    public void initView() {
 
         // Node Variables
         //Set timer label
@@ -118,12 +113,6 @@ public class View extends Application {
         root.getChildren().add(pauseB);
         root.getChildren().add(resetB);
 
-        Scene scene = new Scene(root, 300, 400);
-
-        primaryStage.setTitle("Timer");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
 
     }
 
@@ -158,12 +147,5 @@ public class View extends Application {
     public Group getRoot() {
         return root;
     }
-
-
-    public static void main(String[] args) {
-
-        launch(args);
-    }
-
 
 }

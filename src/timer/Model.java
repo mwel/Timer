@@ -60,5 +60,4 @@ public class Model {
     public void countDownTime() {
         time--;
     }
-
 }
